@@ -300,8 +300,6 @@ def get_rider_history(current_identity, id):
     return jsonify(rider_history_schema.dump(history)), 200
 
 
-Python
-
 # ==========================================
 # TELEMETRY & LOCATION ENDPOINTS
 # ==========================================
