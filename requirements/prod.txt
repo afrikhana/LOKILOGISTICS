@@ -37,7 +37,7 @@ marshmallow-sqlalchemy>=0.29.0,<1.0.0
 
 # Forms Validation
 Flask-WTF==1.2.2
-WTForms==3.2.1
+WTForms==3.2.2
 
 # Deployment & Orchestration
 gevent==25.5.1
