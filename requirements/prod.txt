@@ -18,7 +18,7 @@ pyotp==2.9.0                    # Added for TOTP 2FA operations
 requests==2.32.3                # Added for 2FA service backchannel syncs
 
 # Rate Limiting & Flow Controls
-flask-limiter==3.8.0            # Added for API gatekeeping
+flask-limiter==4.1.1            # Added for API gatekeeping
 redis==5.0.8                    # Added for scaling moving-window Redis tracking
 Flask-Redis==0.4.0
 
