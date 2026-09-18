@@ -12,7 +12,7 @@ email-validator==2.2.0
 Flask-Bcrypt==1.0.1
 Flask-Login==0.6.3
 Flask-JWT-Extended==4.6.0       # Added for modular API token security architecture
-pyotp==2.9.0                    # Added for TOTP 2FA operations
+pyotp==2.10.0                    # Added for TOTP 2FA operations
 
 # Integration Services
 requests==2.32.3                # Added for 2FA service backchannel syncs
