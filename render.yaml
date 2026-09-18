@@ -1,4 +1,5 @@
 services:
+  # --- Flask Web API ---
   - type: web
     name: loki-logistics-api
     env: python
@@ -17,15 +18,17 @@ services:
           property: connectionString
       - key: REDIS_URL
         fromService:
-          type: redis
+          type: keyvalue
           name: loki-redis
           property: connectionString
 
+  # --- Redis Service ---
+  - type: keyvalue
+    name: loki-redis
+    ipAllowList: []
+
+# --- PostgreSQL Database ---
 databases:
   - name: loki-db
     databaseName: lokilogistics
     user: loki
-
-  - type: redis
-    name: loki-redis
-    ipAllowList: []
