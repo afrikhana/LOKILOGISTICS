@@ -31,7 +31,7 @@
   "homepage": "https://github.com/afrikhana/lokiLogistics#readme",
   "dependencies": {
     "@fortawesome/fontawesome-free": "7.0.0",
-    "bootstrap": "5.3.7",
+    "bootstrap": "5.3.8",
     "jquery": "3.7.1",
     "@popperjs/core": "2.11.8"
   },
