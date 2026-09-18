@@ -3,7 +3,7 @@ services:
   - type: web
     name: loki-logistics-api
     env: python
-    plan: free # <--- Ensures 100% free tier
+    plan: free
     buildCommand: "pip install -r requirements.txt && flask db upgrade"
     startCommand: "gunicorn autoapp:app"
     envVars:
@@ -11,6 +11,8 @@ services:
         value: production
       - key: FLASK_APP
         value: autoapp.py
+      - key: SEND_FILE_MAX_AGE_DEFAULT
+        value: "31536000"
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
@@ -26,7 +28,7 @@ services:
   # --- Redis Service ---
   - type: keyvalue
     name: loki-redis
-    plan: free # <--- Ensures 100% free tier
+    plan: free
     ipAllowList: []
 
 # --- PostgreSQL Database ---
@@ -34,4 +36,4 @@ databases:
   - name: loki-db
     databaseName: lokilogistics
     user: loki
-    plan: free # <--- Ensures 100% free tier
+    plan: free
