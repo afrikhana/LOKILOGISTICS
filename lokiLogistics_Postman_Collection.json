@@ -1,0 +1,646 @@
+{
+  "info": {
+    "_postman_id": "loki-logistics-api-collection",
+    "name": "lokiLogistics API",
+    "description": "Postman Collection for testing lokiLogistics Flask API endpoints with JWT Authorization headers.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8090",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "YOUR_JWT_BEARER_TOKEN_HERE",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register - Merchant",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"merchant\",\n  \"business_name\": \"Nairobi Central Electronics\",\n  \"email\": \"merchant@nairobielectronics.co.ke\",\n  \"phone\": \"+254712345678\",\n  \"password\": \"SecretPass123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/register"
+          }
+        },
+        {
+          "name": "Register - Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"customer\",\n  \"full_name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"phone\": \"+254798765432\",\n  \"merchant_id\": 1,\n  \"password\": \"CustomerSecure123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/register"
+          }
+        },
+        {
+          "name": "Register - Rider",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"rider\",\n  \"full_name\": \"Samuel Boda\",\n  \"phone\": \"+254700112233\",\n  \"merchant_id\": 1,\n  \"vehicle_type\": \"motorcycle\",\n  \"vehicle_plate\": \"KMDF 123X\",\n  \"password\": \"RiderPass123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/register"
+          }
+        },
+        {
+          "name": "Login - Merchant",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"merchant\",\n  \"identifier\": \"merchant@nairobielectronics.co.ke\",\n  \"password\": \"SecretPass123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login - Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"customer\",\n  \"identifier\": \"johndoe@example.com\",\n  \"password\": \"CustomerSecure123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Login - Rider",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"rider\",\n  \"identifier\": \"+254700112233\",\n  \"password\": \"RiderPass123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Merchants & Shops",
+      "item": [
+        {
+          "name": "Create Merchant",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"business_name\": \"Nairobi Central Electronics\",\n  \"email\": \"merchant@nairobielectronics.co.ke\",\n  \"phone\": \"+254712345678\",\n  \"password\": \"SecretPass123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/merchants"
+          }
+        },
+        {
+          "name": "Get All Merchants",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/merchants"
+          }
+        },
+        {
+          "name": "Get Merchant by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/merchants/1"
+          }
+        },
+        {
+          "name": "Update Merchant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"business_name\": \"Nairobi Central Electronics HQ\",\n  \"phone\": \"+254712345999\"\n}"
+            },
+            "url": "{{baseUrl}}/api/merchants/1"
+          }
+        },
+        {
+          "name": "Delete Merchant",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/merchants/1"
+          }
+        },
+        {
+          "name": "Create Shop for Merchant",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Westlands Branch\",\n  \"address\": \"Woodvale Grove, Westlands, Nairobi\",\n  \"latitude\": -1.2683,\n  \"longitude\": 36.8111\n}"
+            },
+            "url": "{{baseUrl}}/api/merchants/1/shops"
+          }
+        },
+        {
+          "name": "Get All Shops for Merchant",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/merchants/1/shops"
+          }
+        },
+        {
+          "name": "Get Shop by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/merchants/shops/1"
+          }
+        },
+        {
+          "name": "Update Shop",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Westlands Flagship Store\",\n  \"address\": \"Sarit Centre, Westlands, Nairobi\",\n  \"latitude\": -1.2612,\n  \"longitude\": 36.8055\n}"
+            },
+            "url": "{{baseUrl}}/api/merchants/shops/1"
+          }
+        },
+        {
+          "name": "Delete Shop",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/merchants/shops/1"
+          }
+        },
+        {
+          "name": "Get Shop Audit History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/merchants/shops/1/history"
+          }
+        },
+        {
+          "name": "Override Shipment Pickup (Merchant Approval)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Rider app crash prevented OTP entry; physical handoff verified.\"\n}"
+            },
+            "url": "{{baseUrl}}/api/merchants/shipments/1/override-pickup"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers & Addresses",
+      "item": [
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"merchant_id\": 1,\n  \"full_name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"phone\": \"+254798765432\",\n  \"password\": \"CustomerSecure123!\"\n}"
+            },
+            "url": "{{baseUrl}}/api/customers"
+          }
+        },
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/customers"
+          }
+        },
+        {
+          "name": "Get Customer by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/customers/1"
+          }
+        },
+        {
+          "name": "Update Customer",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Johnathan Doe\",\n  \"phone\": \"+254798765999\"\n}"
+            },
+            "url": "{{baseUrl}}/api/customers/1"
+          }
+        },
+        {
+          "name": "Delete Customer",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/customers/1"
+          }
+        },
+        {
+          "name": "Add Customer Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"label\": \"Home\",\n  \"address\": \"Kilimani Estate, Ngong Road\",\n  \"latitude\": -1.2985,\n  \"longitude\": 36.7915\n}"
+            },
+            "url": "{{baseUrl}}/api/customers/1/addresses"
+          }
+        },
+        {
+          "name": "Get Customer Addresses",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/customers/1/addresses"
+          }
+        },
+        {
+          "name": "Update Address",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Kilimani Estate, Apartment 4B\",\n  \"latitude\": -1.2990,\n  \"longitude\": 36.7920\n}"
+            },
+            "url": "{{baseUrl}}/api/customers/addresses/1"
+          }
+        },
+        {
+          "name": "Delete Customer Address",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/customers/addresses/1"
+          }
+        },
+        {
+          "name": "Get Address Audit History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/customers/addresses/1/history"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Riders & Telemetry",
+      "item": [
+        {
+          "name": "Create Rider",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"merchant_id\": 1,\n  \"full_name\": \"Samuel Boda\",\n  \"phone\": \"+254700112233\",\n  \"vehicle_type\": \"motorcycle\",\n  \"vehicle_plate\": \"KMDF 123X\",\n  \"password\": \"RiderPass123!\",\n  \"is_available\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/riders"
+          }
+        },
+        {
+          "name": "Get All Riders",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/riders"
+          }
+        },
+        {
+          "name": "Get Rider by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/riders/1"
+          }
+        },
+        {
+          "name": "Update Rider",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_available\": true\n}"
+            },
+            "url": "{{baseUrl}}/api/riders/1"
+          }
+        },
+        {
+          "name": "Delete Rider",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/riders/1"
+          }
+        },
+        {
+          "name": "Claim Shipment (Rider)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipment_id\": 1\n}"
+            },
+            "url": "{{baseUrl}}/api/riders/1/claim-shipment"
+          }
+        },
+        {
+          "name": "Verify Pickup OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipment_id\": 1,\n  \"otp\": \"1234\",\n  \"lat\": -1.2683,\n  \"lng\": 36.8111\n}"
+            },
+            "url": "{{baseUrl}}/api/riders/1/verify-pickup"
+          }
+        },
+        {
+          "name": "Verify Delivery OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shipment_id\": 1,\n  \"otp\": \"5678\",\n  \"lat\": -1.2985,\n  \"lng\": 36.7915\n}"
+            },
+            "url": "{{baseUrl}}/api/riders/1/verify-delivery"
+          }
+        },
+        {
+          "name": "Get Rider Task History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/riders/1/history"
+          }
+        },
+        {
+          "name": "Update Rider Location (Broadcast Ping)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": -1.2800,\n  \"lng\": 36.8000\n}"
+            },
+            "url": "{{baseUrl}}/api/riders/1/location"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Shipments & Orders",
+      "item": [
+        {
+          "name": "Customer Place Order & Initiate Shipment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shop_id\": 1,\n  \"delivery_lat\": -1.2985,\n  \"delivery_lng\": 36.7915,\n  \"total_amount\": 4500.00\n}"
+            },
+            "url": "{{baseUrl}}/api/shipments/customer-order"
+          }
+        },
+        {
+          "name": "Create Shipment (Manual / Admin / Merchant)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": 1,\n  \"pickup_lat\": -1.2683,\n  \"pickup_lng\": 36.8111,\n  \"delivery_lat\": -1.2985,\n  \"delivery_lng\": 36.7915\n}"
+            },
+            "url": "{{baseUrl}}/api/shipments"
+          }
+        },
+        {
+          "name": "Get All Shipments",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/shipments"
+          }
+        },
+        {
+          "name": "Get Shipment by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/shipments/1"
+          }
+        },
+        {
+          "name": "Generate / Reset Pickup OTP (Merchant)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup_otp\": \"1234\"\n}"
+            },
+            "url": "{{baseUrl}}/api/shipments/1/generate-pickup-otp"
+          }
+        },
+        {
+          "name": "Generate / Dispatch Delivery OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"delivery_otp\": \"5678\"\n}"
+            },
+            "url": "{{baseUrl}}/api/shipments/1/generate-delivery-otp"
+          }
+        },
+        {
+          "name": "Rider Pickup Shipment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup_otp\": \"1234\"\n}"
+            },
+            "url": "{{baseUrl}}/api/shipments/1/pickup"
+          }
+        },
+        {
+          "name": "Ultra-Lean Telemetry Webhook (204 No Content)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"t\": \"LOKI-99203\",\n  \"lat\": -1.2750,\n  \"lng\": 36.8050\n}"
+            },
+            "url": "{{baseUrl}}/api/shipments/webhook/telemetry"
+          }
+        },
+        {
+          "name": "Stream Live Shipment Location (SSE)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "text/event-stream" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": "{{baseUrl}}/api/shipments/1/stream-location"
+          }
+        }
+      ]
+    }
+  ]
+}

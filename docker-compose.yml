@@ -1,0 +1,123 @@
+x-build-args: &build_args
+  INSTALL_PYTHON_VERSION: "3.12.3"
+  INSTALL_NODE_VERSION: "22.23.0"
+
+x-default-volumes: &default_volumes
+  volumes:
+    - ./:/app
+    - node-modules:/app/node_modules
+    - ./dev.db:/tmp/dev.db
+
+services:
+  # --- Logistics PostgreSQL Database ---
+  db:
+    image: "postgres:15-alpine"
+    container_name: "loki-logistics-db"
+    environment:
+      POSTGRES_DB: ${DB_NAME:-lokilogistics}
+      POSTGRES_USER: ${DB_USER:-loki}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-loki_secret}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-loki} -d ${DB_NAME:-lokilogistics}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: always
+
+  # --- Redis Cache & Telemetry Pub/Sub Engine ---
+  redis:
+    image: "redis:7.2-alpine"
+    container_name: "loki-logistics-redis"
+    restart: always
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+
+  # --- Development Flask App ---
+  flask-dev:
+    build:
+      context: .
+      target: development
+      args:
+        <<: *build_args
+    image: "lokilogistics-development"
+    ports:
+      - "${DEV_PORT:-8090}:5000"
+      - "2992:2992"
+    env_file: .env
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: autoapp.py
+      FLASK_DEBUG: 1
+      REDIS_URL: "redis://redis:6379/0"
+      DATABASE_URL: "postgresql://${DB_USER:-loki}:${DB_PASSWORD:-loki_secret}@db:5432/${DB_NAME:-lokilogistics}"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    <<: *default_volumes
+
+  # --- Production Deployment Container ---
+  flask-prod:
+    build:
+      context: .
+      target: production
+      args:
+        <<: *build_args
+    image: "lokilogistics-production"
+    ports:
+      - "${PROD_PORT:-8091}:5000"
+    env_file: .env
+    environment:
+      FLASK_ENV: production
+      FLASK_APP: autoapp.py
+      FLASK_DEBUG: 0
+      LOG_LEVEL: info
+      GUNICORN_WORKERS: 4
+      REDIS_URL: "redis://redis:6379/0"
+      DATABASE_URL: "postgresql://${DB_USER:-loki}:${DB_PASSWORD:-loki_secret}@db:5432/${DB_NAME:-lokilogistics}"
+      SECRET_KEY: ${SECRET_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: always
+    <<: *default_volumes
+
+  # --- Operational Management Utility ---
+  manage:
+    build:
+      context: .
+      target: development
+      args:
+        <<: *build_args
+    image: "lokilogistics-manage"
+    entrypoint: flask
+    env_file: .env
+    environment:
+      FLASK_ENV: production
+      FLASK_APP: autoapp.py
+      FLASK_DEBUG: 0
+      REDIS_URL: "redis://redis:6379/0"
+      DATABASE_URL: "postgresql://${DB_USER:-loki}:${DB_PASSWORD:-loki_secret}@db:5432/${DB_NAME:-lokilogistics}"
+      SECRET_KEY: ${SECRET_KEY}
+    stdin_open: true
+    tty: true
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    <<: *default_volumes
+
+volumes:
+  node-modules:
+  redis-data:
+  db-data:
