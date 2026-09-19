@@ -1,10 +1,9 @@
 services:
-  # --- Flask Web API ---
   - type: web
     name: loki-logistics-api
     env: python
     plan: free
-    buildCommand: "pip install -r requirements.txt && flask db upgrade"
+    buildCommand: "pip install -r requirements.txt && (flask db stamp head || true) && flask db upgrade"
     startCommand: "gunicorn autoapp:app"
     envVars:
       - key: FLASK_ENV
@@ -25,13 +24,11 @@ services:
           name: loki-redis
           property: connectionString
 
-  # --- Redis Service ---
   - type: keyvalue
     name: loki-redis
     plan: free
     ipAllowList: []
 
-# --- PostgreSQL Database ---
 databases:
   - name: loki-db
     databaseName: lokilogistics
